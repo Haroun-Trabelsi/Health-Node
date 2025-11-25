@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      NEXTAUTH_SECRET: test-secret
+      NEXTAUTH_URL: http://localhost:3000
+      MONGODB_URI: mongodb://127.0.0.1:27017/health-node-ci
+      MONGODB_DB_NAME: health-node-ci
+      GOOGLE_CLIENT_ID: test-client
+      GOOGLE_CLIENT_SECRET: test-secret
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_SENTRY_DSN: ''
+      SENTRY_DSN: ''
+      SENTRY_ENVIRONMENT: ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test:unit
+      - run: npx playwright install --with-deps
+      - run: npm run test:e2e
+      - run: docker build -f docker/Dockerfile .
