@@ -3,9 +3,7 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const config: NextConfig = {
   output: 'standalone',
-  experimental: {
-    typedRoutes: true
-  }
+  typedRoutes: true
 };
 
 export default withSentryConfig(
@@ -13,7 +11,5 @@ export default withSentryConfig(
   {
     silent: true
   },
-  {
-    hideSourceMaps: true
-  }
+
 );

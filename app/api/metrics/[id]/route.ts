@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { buildErrorResponse, buildSuccessResponse } from '@/lib/http';
 import { dailyMetricRepository } from '@/lib/repositories/dailyMetricRepository';
@@ -7,13 +7,18 @@ import { dailyMetricSchema, objectIdSchema } from '@/lib/validations';
 import { ApiError, handleApiError } from '@/utils/error';
 
 interface RouteParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export async function GET(_request: Request, { params }: RouteParams) {
+const resolveParams = async (params: RouteParams['params']) => {
+  const resolved = await params;
+  return objectIdSchema.parse(resolved.id);
+};
+
+export async function GET(_request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getSessionUser();
-    const metricId = objectIdSchema.parse(params.id);
+    const metricId = await resolveParams(params);
     const metric = await dailyMetricRepository.findById(metricId, user.id);
 
     if (!metric) {
@@ -27,10 +32,10 @@ export async function GET(_request: Request, { params }: RouteParams) {
   }
 }
 
-export async function PUT(request: Request, { params }: RouteParams) {
+export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getSessionUser();
-    const metricId = objectIdSchema.parse(params.id);
+    const metricId = await resolveParams(params);
     const body = await request.json();
     const parsed = dailyMetricSchema.partial().safeParse(body);
 
@@ -51,10 +56,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(_request: Request, { params }: RouteParams) {
+export async function DELETE(_request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getSessionUser();
-    const metricId = objectIdSchema.parse(params.id);
+    const metricId = await resolveParams(params);
 
     const deleted = await dailyMetricRepository.remove(metricId, user.id);
 

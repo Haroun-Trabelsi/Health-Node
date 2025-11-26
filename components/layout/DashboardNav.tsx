@@ -1,9 +1,10 @@
+import type { Route } from 'next';
 import Link from 'next/link';
 
 const navItems = [
   { href: '/dashboard', label: 'Overview' },
   { href: '/public/articles', label: 'Articles' }
-];
+] as const satisfies ReadonlyArray<{ href: Route; label: string }>;
 
 export const DashboardNav = () => (
   <nav className="flex items-center gap-6 border-b border-slate-200 px-6 py-4">

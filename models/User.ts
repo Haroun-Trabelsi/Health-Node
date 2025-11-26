@@ -16,6 +16,7 @@ export interface UserProfile {
 
 export interface IUser extends Document, UserProfile {
   provider: string;
+  passwordHash?: string;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -29,7 +30,8 @@ const UserSchema = new Schema<IUser>(
       notificationsEnabled: { type: Boolean, default: true },
       focusAreas: { type: [String], default: [] }
     },
-    provider: { type: String, default: 'google' }
+    provider: { type: String, default: 'google' },
+    passwordHash: { type: String }
   },
   { timestamps: true }
 );

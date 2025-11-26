@@ -1,11 +1,16 @@
 import 'dotenv/config';
 
+import bcrypt from 'bcryptjs';
+
 import { connectToDatabase } from '../lib/db';
 import { DailyMetricModel } from '../models/DailyMetric';
 import { UserModel } from '../models/User';
 
 const seed = async () => {
   await connectToDatabase();
+
+  const seedPassword = process.env.SEED_USER_PASSWORD ?? 'Password123!';
+  const passwordHash = await bcrypt.hash(seedPassword, 10);
 
   const user = await UserModel.findOneAndUpdate(
     { email: 'sample@healthnode.dev' },
@@ -16,7 +21,8 @@ const seed = async () => {
         unitSystem: 'metric',
         notificationsEnabled: true,
         focusAreas: ['sleep', 'recovery']
-      }
+      },
+      passwordHash
     },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
@@ -40,6 +46,9 @@ const seed = async () => {
   await DailyMetricModel.insertMany(sampleMetrics);
 
   console.log('Seed data generated for', user.email);
+  console.log('Use the following credentials to sign in with Credentials provider:');
+  console.log(`Email: ${user.email}`);
+  console.log(`Password: ${seedPassword}`);
 };
 
 seed()

@@ -1,5 +1,6 @@
 import { MetricHighlights } from '@/components/dashboard/MetricHighlights';
 import { MetricTable } from '@/components/dashboard/MetricTable';
+import { NewMetricForm } from '@/components/dashboard/NewMetricForm';
 import { MetricsTrendChart } from '@/components/charts/MetricsTrendChart';
 import { dailyMetricRepository } from '@/lib/repositories/dailyMetricRepository';
 import { buildMetricSummary, buildTrendSeries, type MetricSummary } from '@/lib/services/analyticsService';
@@ -22,8 +23,15 @@ export const DashboardPageContent = ({ metrics, summary, trendData }: DashboardP
     <MetricHighlights summary={summary} />
 
     <div className="grid gap-6 lg:grid-cols-5">
-      <div className="lg:col-span-3">
+      <div className="space-y-6 lg:col-span-3">
         <MetricsTrendChart data={trendData} />
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <h3 className="text-base font-semibold text-slate-900">Add daily entry</h3>
+          <p className="mt-1 text-sm text-slate-500">Capture today&apos;s measurements to keep insights fresh.</p>
+          <div className="mt-4">
+            <NewMetricForm />
+          </div>
+        </div>
       </div>
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:col-span-2">
         <h3 className="text-base font-semibold text-slate-900">Wellness goals</h3>

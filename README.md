@@ -6,7 +6,7 @@ A complete, scalable boilerplate for a Next.js health-tracking application. Buil
 
 - **Next.js App Router** - Modern React framework with server components and API routes
 - **MongoDB + Mongoose** - Long-lived database connections with clean repository pattern
-- **NextAuth.js** - JWT strategy with Google OAuth, secure cookies, and session management
+- **NextAuth.js** - JWT strategy with Google OAuth, credentials login, secure cookies, and session management
 - **TypeScript** - Full type safety across models, API responses, and components
 - **TailwindCSS** - Modern utility-first styling
 - **Recharts** - Beautiful, responsive health metrics charts
@@ -14,6 +14,7 @@ A complete, scalable boilerplate for a Next.js health-tracking application. Buil
 - **Testing** - Jest, React Testing Library, and Playwright E2E tests
 - **Docker** - Multi-stage production builds with Docker Compose
 - **CI/CD** - GitHub Actions workflow for automated testing and builds
+- **Interactive dashboard** - Inline forms to add new metrics and edit previous entries
 
 ## 📁 Project Structure
 
@@ -102,6 +103,11 @@ npm run seed
 ```
 
 This creates a sample user (`sample@healthnode.dev`) with 7 days of example health metrics.
+By default, the seed script sets the password to `Password123!` (override via `SEED_USER_PASSWORD` in `.env`).
+You can now sign in using:
+
+- Email: `sample@healthnode.dev`
+- Password: `Password123!`
 
 4. **Run the development server:**
 
@@ -188,6 +194,7 @@ All routes require authentication via NextAuth session.
 
 - **NextAuth.js** with JWT strategy
 - **Google OAuth** provider
+- **Credentials provider** with bcrypt hashing (seeded demo user)
 - **Secure cookies** (httpOnly, sameSite, secure in production)
 - **Session callbacks** for user data enrichment
 
