@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
-import { CredentialsSignInForm } from '@/components/auth/CredentialsSignInForm';
+import { AuthToggleContainer } from '@/components/auth/AuthToggle';
 import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 import { authOptions } from '@/lib/auth';
 
@@ -28,7 +28,7 @@ export default async function SignInPage() {
           or
           <span className="h-px flex-1 bg-slate-100" />
         </div>
-        <CredentialsSignInForm />
+        <AuthToggleContainer />
       </section>
     </main>
   );

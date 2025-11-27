@@ -93,8 +93,9 @@ export const authOptions: NextAuthOptions = {
         }
 
         await connectToDatabase();
-        const user = await UserModel.findOne({ email: parsed.data.email }).exec();
-
+        const user = await UserModel.findOne({ email: parsed.data.email })
+        .select('+passwordHash') 
+        .exec();
         if (!user?.passwordHash) {
           throw new Error('Invalid email or password');
         }
