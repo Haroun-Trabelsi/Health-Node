@@ -18,6 +18,10 @@ export const CredentialsSignUpForm = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
     setIsSubmitting(true);
 
     try {

@@ -87,7 +87,6 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         const parsed = credentialsSchema.safeParse(credentials);
-
         if (!parsed.success) {
           throw new Error('Invalid credentials');
         }
